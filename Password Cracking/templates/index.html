@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credential Attack & Policy Suite</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons (Lightweight Icons) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <i class="ph-duotone ph-shield-check shield-icon"></i>
+                <h2>Audit<span>Suite</span></h2>
+            </div>
+            <ul class="nav-links">
+                <li class="active" data-tab="dashboard"><i class="ph ph-squares-four"></i> Dashboard</li>
+                <li data-tab="dictionary"><i class="ph ph-text-aa"></i> Dictionary Gen</li>
+                <li data-tab="extractor"><i class="ph ph-file-dashed"></i> Hash Extractor</li>
+                <li data-tab="analyzer"><i class="ph ph-gauge"></i> Strength Analyzer</li>
+                <li data-tab="simulator"><i class="ph ph-cpu"></i> Brute-Force Sim</li>
+            </ul>
+            <div class="sidebar-footer">
+                <p>Ethical Execution Only</p>
+                <div class="status-indicator">
+                    <span class="dot green"></span> System Online
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="top-header">
+                <h1 id="page-title">Dashboard Overview</h1>
+                <div class="user-profile">
+                    <i class="ph ph-user-circle"></i> Auditor
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                
+                <!-- Dashboard Tab (Default) -->
+                <section id="dashboard" class="tab-pane active fade-in">
+                    <div class="hero-card glass-panel">
+                        <div class="hero-content">
+                            <h2>Password Cracking & Credential Attack Suite</h2>
+                            <p>An educational toolkit designed for testing password policies, simulating credential attacks, and analyzing entropy in a controlled lab environment.</p>
+                        </div>
+                        <div class="hero-graphic">
+                            <i class="ph-duotone ph-fingerprint"></i>
+                        </div>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card glass-panel" onclick="switchTab('dictionary')">
+                            <i class="ph-duotone ph-books"></i>
+                            <div class="stat-info">
+                                <h3>Dictionary Generator</h3>
+                                <span>Mutations & Permutations</span>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-panel" onclick="switchTab('extractor')">
+                            <i class="ph-duotone ph-file-code"></i>
+                            <div class="stat-info">
+                                <h3>Hash Extractor</h3>
+                                <span>Linux / Windows Dumps</span>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-panel" onclick="switchTab('analyzer')">
+                            <i class="ph-duotone ph-chart-line-up"></i>
+                            <div class="stat-info">
+                                <h3>Strength Analyzer</h3>
+                                <span>Entropy & Complexity checks</span>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-panel" onclick="switchTab('simulator')">
+                            <i class="ph-duotone ph-sword"></i>
+                            <div class="stat-info">
+                                <h3>Attack Simulator</h3>
+                                <span>Brute-force & Dictionary estimates</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Dictionary Generator Tab -->
+                <section id="dictionary" class="tab-pane fade-in">
+                    <div class="tool-layout">
+                        <div class="tool-config glass-panel">
+                            <h3><i class="ph ph-faders"></i> Configuration</h3>
+                            <form id="dict-form" class="cyber-form">
+                                <div class="form-group">
+                                    <label>Base Words (Comma Separated)</label>
+                                    <textarea id="base-words" placeholder="e.g., admin, password, P4ss..." rows="3" required></textarea>
+                                </div>
+                                <div class="form-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="inc-leet" checked>
+                                        <span class="custom-checkbox"></span>
+                                        Leet Speak (a->@, e->3)
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="inc-caps" checked>
+                                        <span class="custom-checkbox"></span>
+                                        Capitalization variations
+                                    </label>
+                                </div>
+                                <div class="form-group slide-group">
+                                    <label>Max Number Append <span id="max-num-val">99</span></label>
+                                    <input type="range" id="max-number" min="0" max="999" value="99" oninput="document.getElementById('max-num-val').innerText=this.value">
+                                </div>
+                                <button type="submit" class="cyber-btn primary-btn"><i class="ph ph-lightning"></i> Generate Words</button>
+                            </form>
+                        </div>
+                        <div class="tool-output glass-panel">
+                            <div class="output-header">
+                                <h3><i class="ph ph-terminal-window"></i> Output Console</h3>
+                                <span class="badge" id="dict-badge">0 words</span>
+                            </div>
+                            <pre id="dict-output" class="console">Waiting for input...</pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Hash Extractor Tab -->
+                <section id="extractor" class="tab-pane fade-in">
+                    <div class="tool-layout">
+                        <div class="tool-config glass-panel">
+                            <h3><i class="ph ph-upload-simple"></i> Input Dump File</h3>
+                            <form id="extract-form" class="cyber-form">
+                                <div class="radio-group">
+                                    <label class="radio-label">
+                                        <input type="radio" name="os_type" value="linux" checked>
+                                        <span class="custom-radio"></span> Linux (/etc/shadow)
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="os_type" value="windows">
+                                        <span class="custom-radio"></span> Windows (SAM/PWDUMP)
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label>Paste Raw Content or Content File</label>
+                                    <textarea id="hash-content" placeholder="root:$6$xyzsalt$hash:18000:0:99999:7:::\nuser1:$1$somesalt$hash:18000:0:99999:7:::" rows="8" required></textarea>
+                                </div>
+                                <button type="submit" class="cyber-btn primary-btn"><i class="ph ph-magnifying-glass"></i> Parse & Extract</button>
+                            </form>
+                        </div>
+                        <div class="tool-output glass-panel">
+                            <div class="output-header">
+                                <h3><i class="ph ph-list-magnifying-glass"></i> Parsed Hashes</h3>
+                                <span class="badge" id="hash-count">0 extracted</span>
+                            </div>
+                            <div id="hash-results-table" class="table-container">
+                                <div class="placeholder-text">Run extraction to see results...</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Strength Analyzer Tab -->
+                <section id="analyzer" class="tab-pane fade-in">
+                    <div class="center-card glass-panel">
+                        <h2>Password Entropy Analyzer</h2>
+                        <p>Evaluate mathematical complexity and predictability.</p>
+                        
+                        <div class="analyze-input-group">
+                            <input type="password" id="analyze-pwd" placeholder="Enter password to test...">
+                            <button id="toggle-pwd" class="icon-btn"><i class="ph ph-eye"></i></button>
+                        </div>
+                        <button id="btn-analyze" class="cyber-btn primary-btn full-width mt-4">Run Analysis</button>
+
+                        <div id="analyze-results" class="results-grid mt-5 hidden">
+                            <div class="metric-card">
+                                <h4>Strength</h4>
+                                <div id="res-strength" class="metric-val text-brand">-</div>
+                            </div>
+                            <div class="metric-card">
+                                <h4>Entropy (bits)</h4>
+                                <div id="res-entropy" class="metric-val">-</div>
+                            </div>
+                            <div class="metric-card">
+                                <h4>Length</h4>
+                                <div id="res-length" class="metric-val">-</div>
+                            </div>
+                            <div class="metric-card">
+                                <h4>Charset Size</h4>
+                                <div id="res-charset" class="metric-val">-</div>
+                            </div>
+                            
+                            <div class="recommendations-box">
+                                <h4>Security Improvement Recommendations:</h4>
+                                <ul id="res-recs" class="rec-list">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Brute Force Simulator Tab -->
+                <section id="simulator" class="tab-pane fade-in">
+                    <div class="tool-layout">
+                        <div class="tool-config glass-panel">
+                            <h3><i class="ph ph-crosshair"></i> Attack Settings</h3>
+                            
+                            <div class="tabs-mini">
+                                <button class="mini-tab active" onclick="switchSimType('incremental')">Incremental Time Ext.</button>
+                                <button class="mini-tab" onclick="switchSimType('dictionary')">Dictionary / Hash Crack</button>
+                            </div>
+                            
+                            <!-- Incremental Form -->
+                            <form id="sim-incr-form" class="cyber-form mt-4">
+                                <div class="form-group slide-group">
+                                    <label>Max Password Length <span id="max-len-val">8</span></label>
+                                    <input type="range" id="sim-max-len" min="1" max="15" value="8" oninput="document.getElementById('max-len-val').innerText=this.value">
+                                </div>
+                                <div class="form-group slide-group">
+                                    <label>Hardware Hash Rate (H/s) <span class="monospace text-muted">1 Billion default</span></label>
+                                    <input type="number" id="sim-hash-rate" value="1000000000" class="cyber-input">
+                                </div>
+                                <div class="form-row mt-3">
+                                    <label class="checkbox-label"><input type="checkbox" id="sim-lower" checked><span class="custom-checkbox"></span> Lowercase (a-z)</label>
+                                    <label class="checkbox-label"><input type="checkbox" id="sim-upper" checked><span class="custom-checkbox"></span> Uppercase (A-Z)</label>
+                                </div>
+                                <div class="form-row">
+                                    <label class="checkbox-label"><input type="checkbox" id="sim-digits" checked><span class="custom-checkbox"></span> Digits (0-9)</label>
+                                    <label class="checkbox-label"><input type="checkbox" id="sim-symbols"><span class="custom-checkbox"></span> Symbols (!@#)</label>
+                                </div>
+                                <button type="submit" class="cyber-btn primary-btn mt-3"><i class="ph ph-play"></i> Simulate Exhaustion</button>
+                            </form>
+                            
+                            <!-- Dictionary Form -->
+                            <form id="sim-dict-form" class="cyber-form mt-4 hidden">
+                                <div class="form-group">
+                                    <label>Hash Algorithm</label>
+                                    <select id="sim-algo" class="cyber-input">
+                                        <option value="NTLM">NTLM (Windows)</option>
+                                        <option value="MD5">MD5</option>
+                                        <option value="SHA-1">SHA-1</option>
+                                        <option value="SHA-256">SHA-256</option>
+                                        <option value="SHA-512">SHA-512</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Target Hash</label>
+                                    <input type="text" id="sim-target-hash" class="cyber-input monospace" placeholder="e.g. 209c6174da490caeb422f3fa5a7ae634" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Wordlist (comma separated for test)</label>
+                                    <textarea id="sim-wordlist" placeholder="admin, admin123, password, root" rows="4" required></textarea>
+                                </div>
+                                <button type="submit" class="cyber-btn primary-btn mt-3"><i class="ph ph-skull"></i> Execute Attack</button>
+                            </form>
+                        </div>
+                        
+                        <div class="tool-output glass-panel">
+                            <div class="output-header">
+                                <h3><i class="ph ph-broadcast"></i> Telemetry & Results</h3>
+                            </div>
+                            <div id="sim-output-container" class="sim-results">
+                                <div class="placeholder-text">Configure and execute a simulation...</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

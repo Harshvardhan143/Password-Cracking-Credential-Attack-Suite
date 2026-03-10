@@ -1,0 +1,31 @@
+============================================================
+            PASSWORD SECURITY AUDIT REPORT            
+============================================================
+Generated on: 2026-03-10 12:45:00
+
+--- 1. Hashes Extracted ---
+Total Hashes Extracted: 3
+  User: root | OS: Linux | Algo: SHA-512
+  User: admin | OS: Windows | Algo: NTLM
+  User: guest | OS: Windows | Algo: NTLM
+
+--- 2. Dictionary Analysis ---
+Generated Custom Dictionary with 256 entries. (Base words: password, admin)
+
+--- 3. Password Strength Analysis ---
+Password Sample: password123
+  Strength: Weak (Entropy: 38.5)
+  Recommendations:
+    - Increase password length to at least 8-12 characters.
+    - Add uppercase letters.
+    - Add special symbols.
+
+Password Sample: C0rr3ctH0rs3B@tt3rySt@pl3!
+  Strength: Very Strong (Entropy: 172.8)
+
+--- 4. Brute-Force Simulation ---
+Estimated time to crack 8-char alphanumeric: 5.82 hours
+Cracked Hashes (Dictionary Attack):
+  User: admin | Password: password123 | Attempts: 4 | Time: 0.0001s
+
+============================================================
