@@ -9,9 +9,10 @@ from brute_force_simulator import brute_force_dictionary, simulate_incremental_b
 
 app = Flask(__name__)
 
-# Mock path for uploaded/tested files in a real app,
-# Here we'll just write submitted text to temp files for the extractors to read.
-TEMP_DIR = os.path.join(os.path.dirname(__file__), 'temp')
+import tempfile
+
+# Use system temp directory (like /tmp on Linux) for Vercel serverless compatibility
+TEMP_DIR = os.path.join(tempfile.gettempdir(), 'unified_mentor_temp')
 os.makedirs(TEMP_DIR, exist_ok=True)
 
 @app.route('/')
